@@ -137,11 +137,6 @@ open class Button: UIButton, Brandable {
     
     open override func image(for state: UIControl.State) -> UIImage? { nil }
     open override func setImage(_ image: UIImage?, for state: UIControl.State) { images[state] = image; update() }
-
-    open override func setTitle(_ title: String?, for state: UIControl.State) {
-        super.setTitle(title, for: state)
-        update()
-    }
     
     override public var backgroundColor: UIColor? { didSet { backgroundColors[.normal] = backgroundColor } }
     override public var isSelected: Bool { didSet { update() } }
