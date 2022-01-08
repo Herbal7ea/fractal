@@ -17,7 +17,7 @@ public protocol SectionBuilder {
     // This allows Section to be a protocol instead of a concrete type, also a readable API
 }
 
-public protocol Section: class { // Base for NestedSection and BedrockSection
+public protocol Section: AnyObject { // Base for NestedSection and BedrockSection
 
     func willReload()
     func didReload()
@@ -121,5 +121,9 @@ public struct SectionCellSize {
     
     public static var automatic: SectionCellSize {
         return SectionCellSize(width: nil, height: nil)
+    }
+    
+    public static func automaticHeight(in view: UIView) -> SectionCellSize {
+        return SectionCellSize(width: view.bounds.size.width, height: nil)
     }
 }

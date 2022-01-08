@@ -45,6 +45,7 @@
 		922F555522BA39C1005ABF39 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F555222BA39C0005ABF39 /* CardView.swift */; };
 		922F555622BA39C1005ABF39 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F555322BA39C0005ABF39 /* CardViewController.swift */; };
 		922F555722BA39C1005ABF39 /* DrawerHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F555422BA39C0005ABF39 /* DrawerHandleView.swift */; };
+		925D8D5F271158E20046ABE8 /* UIImage+Saving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D8D5E271158E20046ABE8 /* UIImage+Saving.swift */; };
 		9284A74523D46D5E00AD66EF /* PeekingContentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9284A74423D46D5E00AD66EF /* PeekingContentSection.swift */; };
 		92A5884A23D46F6200B462CD /* GapSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5884923D46F6100B462CD /* GapSection.swift */; };
 		92AC188222E9F69B0002376E /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC188122E9F69B0002376E /* GroupSection.swift */; };
@@ -55,6 +56,7 @@
 		92AC189E22F6AB8B0002376E /* ViewControllersSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC189D22F6AB8B0002376E /* ViewControllersSection.swift */; };
 		92BA39012179829900266383 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92BA38F72179829800266383 /* DesignSystem.framework */; };
 		92BA39062179829900266383 /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA39052179829900266383 /* DesignSystemTests.swift */; };
+		92C44F03268FAE7D0004A9F5 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C44F02268FAE7D0004A9F5 /* UIImage+Extensions.swift */; };
 		92C5D92522F1727000E1A68D /* Section+Enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C5D92422F1727000E1A68D /* Section+Enumeration.swift */; };
 		92EAA29922A01F5F000EB39F /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA29822A01F5F000EB39F /* CGFloat+Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -137,6 +139,7 @@
 		922F555222BA39C0005ABF39 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		922F555322BA39C0005ABF39 /* CardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		922F555422BA39C0005ABF39 /* DrawerHandleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawerHandleView.swift; sourceTree = "<group>"; };
+		925D8D5E271158E20046ABE8 /* UIImage+Saving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Saving.swift"; sourceTree = "<group>"; };
 		9284A74423D46D5E00AD66EF /* PeekingContentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingContentSection.swift; sourceTree = "<group>"; };
 		92A5884923D46F6100B462CD /* GapSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GapSection.swift; sourceTree = "<group>"; };
 		92AC188122E9F69B0002376E /* GroupSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
@@ -149,6 +152,7 @@
 		92BA39002179829900266383 /* DesignSystemTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DesignSystemTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BA39052179829900266383 /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemTests.swift; sourceTree = "<group>"; };
 		92BA39072179829900266383 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92C44F02268FAE7D0004A9F5 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		92C5D92422F1727000E1A68D /* Section+Enumeration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section+Enumeration.swift"; sourceTree = "<group>"; };
 		92EAA29822A01F5F000EB39F /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -199,7 +203,9 @@
 		7244A0A8230D233D00C7EC28 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				920962E12271518D00FC8E6F /* Helpers.swift */,
 				7244A0A9230D234F00C7EC28 /* Observable.swift */,
+				925D8D5E271158E20046ABE8 /* UIImage+Saving.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -214,7 +220,6 @@
 				920962C92271518D00FC8E6F /* Atoms */,
 				92AC188E22EDB35E0002376E /* Molecules */,
 				922F554922BA1650005ABF39 /* Organisms */,
-				920962E12271518D00FC8E6F /* Helpers.swift */,
 				920962E22271518D00FC8E6F /* DesignSystem.h */,
 				2256485A241233AF0081CAD5 /* Info.plist */,
 			);
@@ -258,6 +263,7 @@
 				920962E62271518D00FC8E6F /* UIViewController+Contain.swift */,
 				920962E72271518D00FC8E6F /* NSObject+Extensions.swift */,
 				92EAA29822A01F5F000EB39F /* CGFloat+Extensions.swift */,
+				92C44F02268FAE7D0004A9F5 /* UIImage+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -519,6 +525,7 @@
 				922F555722BA39C1005ABF39 /* DrawerHandleView.swift in Sources */,
 				92AC188622E9F6E00002376E /* DividerSection.swift in Sources */,
 				9228C598229CC31200B8972B /* Section+InputChain.swift in Sources */,
+				92C44F03268FAE7D0004A9F5 /* UIImage+Extensions.swift in Sources */,
 				920963392271518E00FC8E6F /* UIColor+Extensions.swift in Sources */,
 				922F555622BA39C1005ABF39 /* CardViewController.swift in Sources */,
 				9209635D2271518E00FC8E6F /* SectionCollectionViewCell.swift in Sources */,
@@ -546,6 +553,7 @@
 				9209635C2271518E00FC8E6F /* SectionControllerDataSource.swift in Sources */,
 				728D057C2282996000B44543 /* DateManager.swift in Sources */,
 				9209635B2271518E00FC8E6F /* SectionTableViewCell.swift in Sources */,
+				925D8D5F271158E20046ABE8 /* UIImage+Saving.swift in Sources */,
 				9228C563229CB21600B8972B /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

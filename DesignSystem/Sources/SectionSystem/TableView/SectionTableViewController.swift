@@ -95,7 +95,7 @@ extension SectionTableViewController: SectionController {
     }
 }
 
-open class SectionTableViewController: UITableViewController, Brandable {
+open class SectionTableViewController: UITableViewController, SectionBuilder, Brandable {
     
     private let useRefreshControl: Bool
     private var registeredReuseIdentifiers: Set<String> = []

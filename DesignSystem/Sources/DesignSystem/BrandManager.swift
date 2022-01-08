@@ -222,6 +222,12 @@ public struct Typography: CaseIterable, Equatable {
         let defaultFont: UIFont = .systemFont(ofSize: fontSize, weight: fontWeight)
         guard let fontName = name else { return defaultFont }
         guard let font = UIFont(name: fontName, size: fontSize) else {
+            
+            for family in UIFont.familyNames.sorted() {
+                let names = UIFont.fontNames(forFamilyName: family)
+                print("Family: \(family) Font names: \(names)")
+            }
+            
             print("Couldn't set font named \(name ?? ""), remember it's not the file name it's the actual font name, take a look in UIFont.familyNames : fontNames(forFamilyName:) and see if matches")
             return defaultFont
         }
@@ -241,7 +247,7 @@ public struct Typography: CaseIterable, Equatable {
         BrandManager.shared.brand.fontWeight(for: self)
     }
 
-    public var useAccessibility: Bool { return !modifiers.contains(.noAccessibility) }
+    public var useAccessibility: Bool { !modifiers.contains(.noAccessibility) }
 
     public var isStrong: Bool { modifiers.contains(.strong) }
 
@@ -263,22 +269,23 @@ public extension Typography {
     static let xxlarge = Typography(.xxlarge)
     static let xxxlarge = Typography(.xxxlarge)
 
-    static func xxsmall(_ modifier: Modifier) -> Typography { return Typography(.xxsmall, [modifier]) }
-    static func xsmall(_ modifier: Modifier)  -> Typography { return Typography(.xsmall, [modifier]) }
-    static func small(_ modifier: Modifier)   -> Typography { return Typography(.small, [modifier]) }
-    static func medium(_ modifier: Modifier)  -> Typography { return Typography(.medium, [modifier]) }
-    static func large(_ modifier: Modifier)   -> Typography { return Typography(.large, [modifier]) }
-    static func xlarge(_ modifier: Modifier)  -> Typography { return Typography(.xlarge, [modifier]) }
-    static func xxlarge(_ modifier: Modifier) -> Typography { return Typography(.xxlarge, [modifier]) }
-    static func xxxlarge(_ modifier: Modifier) -> Typography { return Typography(.xxxlarge, [modifier]) }
+    static func xxsmall(_ modifier: Modifier)  -> Typography { Typography(.xxsmall, [modifier]) }
+    static func xsmall(_ modifier: Modifier)   -> Typography { Typography(.xsmall, [modifier]) }
+    static func small(_ modifier: Modifier)    -> Typography { Typography(.small, [modifier]) }
+    static func medium(_ modifier: Modifier)   -> Typography { Typography(.medium, [modifier]) }
+    static func large(_ modifier: Modifier)    -> Typography { Typography(.large, [modifier]) }
+    static func xlarge(_ modifier: Modifier)   -> Typography { Typography(.xlarge, [modifier]) }
+    static func xxlarge(_ modifier: Modifier)  -> Typography { Typography(.xxlarge, [modifier]) }
+    static func xxxlarge(_ modifier: Modifier) -> Typography { Typography(.xxxlarge, [modifier]) }
 
-    static func xxsmall(_ modifiers: [Modifier])  -> Typography { return Typography(.xxsmall, modifiers) }
-    static func xsmall(_ modifiers: [Modifier])   -> Typography { return Typography(.xsmall, modifiers) }
-    static func small(_ modifiers: [Modifier])    -> Typography { return Typography(.small, modifiers) }
-    static func medium(_ modifiers: [Modifier])   -> Typography { return Typography(.medium, modifiers) }
-    static func large(_ modifiers: [Modifier])    -> Typography { return Typography(.large, modifiers) }
-    static func xlarge(_ modifiers: [Modifier])   -> Typography { return Typography(.xlarge, modifiers) }
-    static func xxxlarge(_ modifiers: [Modifier]) -> Typography { return Typography(.xxxlarge, modifiers) }
+    static func xxsmall(_ modifiers: [Modifier])  -> Typography { Typography(.xxsmall, modifiers) }
+    static func xsmall(_ modifiers: [Modifier])   -> Typography { Typography(.xsmall, modifiers) }
+    static func small(_ modifiers: [Modifier])    -> Typography { Typography(.small, modifiers) }
+    static func medium(_ modifiers: [Modifier])   -> Typography { Typography(.medium, modifiers) }
+    static func large(_ modifiers: [Modifier])    -> Typography { Typography(.large, modifiers) }
+    static func xlarge(_ modifiers: [Modifier])   -> Typography { Typography(.xlarge, modifiers) }
+    static func xxlarge(_ modifiers: [Modifier])  -> Typography { Typography(.xxlarge, modifiers) }
+    static func xxxlarge(_ modifiers: [Modifier]) -> Typography { Typography(.xxxlarge, modifiers) }
 }
 
 public extension UIImageView {
@@ -402,22 +409,22 @@ public extension UIColor {
 
 public extension CGFloat { // Spacing and size
 
-    static var xxsmall:  CGFloat { return BrandManager.shared.brand.floatValue(for: .xxsmall) }
-    static var xsmall:   CGFloat { return BrandManager.shared.brand.floatValue(for: .xsmall) }
-    static var small:    CGFloat { return BrandManager.shared.brand.floatValue(for: .small) }
-    static var medium:   CGFloat { return BrandManager.shared.brand.floatValue(for: .medium) }
-    static var large:    CGFloat { return BrandManager.shared.brand.floatValue(for: .large) }
-    static var xlarge:   CGFloat { return BrandManager.shared.brand.floatValue(for: .xlarge) }
-    static var xxlarge:  CGFloat { return BrandManager.shared.brand.floatValue(for: .xxlarge) }
-    static var xxxlarge: CGFloat { return BrandManager.shared.brand.floatValue(for: .xxxlarge) }
+    static var xxsmall:  CGFloat { BrandManager.shared.brand.floatValue(for: .xxsmall) }
+    static var xsmall:   CGFloat { BrandManager.shared.brand.floatValue(for: .xsmall) }
+    static var small:    CGFloat { BrandManager.shared.brand.floatValue(for: .small) }
+    static var medium:   CGFloat { BrandManager.shared.brand.floatValue(for: .medium) }
+    static var large:    CGFloat { BrandManager.shared.brand.floatValue(for: .large) }
+    static var xlarge:   CGFloat { BrandManager.shared.brand.floatValue(for: .xlarge) }
+    static var xxlarge:  CGFloat { BrandManager.shared.brand.floatValue(for: .xxlarge) }
+    static var xxxlarge: CGFloat { BrandManager.shared.brand.floatValue(for: .xxxlarge) }
 
-    static var padding:  CGFloat { return BrandManager.shared.brand.floatValue(for: .padding) }
-    static var keyline:  CGFloat { return BrandManager.shared.brand.floatValue(for: .keyline) }
-    static var divider:  CGFloat { return BrandManager.shared.brand.floatValue(for: .divider) }
+    static var padding:  CGFloat { BrandManager.shared.brand.floatValue(for: .padding) }
+    static var keyline:  CGFloat { BrandManager.shared.brand.floatValue(for: .keyline) }
+    static var divider:  CGFloat { BrandManager.shared.brand.floatValue(for: .divider) }
     
-    static var smallCornerRadius: CGFloat { return BrandManager.shared.brand.floatValue(for: .cornersmall) }
-    static var mediumCornerRadius: CGFloat { return BrandManager.shared.brand.floatValue(for: .cornermedium) }
-    static var largeCornerRadius: CGFloat { return BrandManager.shared.brand.floatValue(for: .cornerlarge) }
+    static var smallCornerRadius: CGFloat { BrandManager.shared.brand.floatValue(for: .cornersmall) }
+    static var mediumCornerRadius: CGFloat { BrandManager.shared.brand.floatValue(for: .cornermedium) }
+    static var largeCornerRadius: CGFloat { BrandManager.shared.brand.floatValue(for: .cornerlarge) }
 }
 
 public extension UIKeyboardAppearance {

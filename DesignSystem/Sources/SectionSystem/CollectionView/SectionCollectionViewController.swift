@@ -83,7 +83,7 @@ extension SectionCollectionViewController: SectionController {
     }
 }
 
-open class SectionCollectionViewController: UICollectionViewController, Brandable {
+open class SectionCollectionViewController: UICollectionViewController, SectionBuilder, Brandable {
     
     private let useRefreshControl: Bool
     private var data: SectionControllerDataSource!

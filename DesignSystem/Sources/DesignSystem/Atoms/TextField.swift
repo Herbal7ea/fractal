@@ -38,16 +38,11 @@ final public class TextField: UITextField {
         update()
     }
 
-    private func setup() {
+    private func update() {
         font = typography.font
         textColor = .text
         tintColor = .brand
         backgroundColor = .clear
         keyboardAppearance = .brandKeyboardAppearance
-    }
-    
-    private func update() {
-        font = typography.font
-        textColor = .text
     }
 }

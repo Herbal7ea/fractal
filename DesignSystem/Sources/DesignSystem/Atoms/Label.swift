@@ -10,33 +10,34 @@ import UIKit
 
 open class Label: UILabel, Brandable {
 
-    public var typography: Typography = .medium { didSet { lineHeight = numberOfLines == 1 ? 0.0 : typography.lineHeight } }
+    public var typography: Typography { didSet { lineHeight = numberOfLines == 1 ? 0.0 : typography.lineHeight } }
     public var actualLineHeight: CGFloat { return max(lineHeight, font.lineHeight) }
     public var underlineStyle: NSUnderlineStyle = [] { didSet { update() } }
     public var letterSpace: CGFloat = 0.0 { didSet { update() } }
     public var lineHeight: CGFloat = 0.0 { didSet { update() } }
+    public var strokeColor: UIColor? { didSet { update() } }
+    public var strokeWidth: CGFloat = 0.0 { didSet { update() } }
 
     override public var font: UIFont! { get { return typography.font } set { } }
     override public var text: String? { didSet { update() } }
     override public var textAlignment: NSTextAlignment { didSet { update() } }
 
-    public init() {
+    public init(typography: Typography = .medium, textColor: UIColor = .text) {
+        self.typography = typography
         super.init(frame: .zero)
-        setup()
+        self.textColor = textColor
     }
     
     public override init(frame: CGRect) {
+        self.typography = .medium
         super.init(frame: frame)
-        setup()
+        self.textColor = .text
     }
 
     public required init?(coder aDecoder: NSCoder) {
+        self.typography = .medium
         super.init(coder: aDecoder)
-        setup()
-    }
-    
-    private func setup() {
-        set(typography: .medium)
+        self.textColor = .text
     }
 
     public func set(typography: Typography, color: UIColor? = nil) {
@@ -86,6 +87,8 @@ open class Label: UILabel, Brandable {
         attr[.foregroundColor] = textColor ?? typography.defaultColor
         attr[.paragraphStyle] = paragraphStyle
         attr[.underlineStyle] = underlineStyle.rawValue
+        attr[.strokeColor] = strokeColor
+        attr[.strokeWidth] = strokeWidth
         attr[.kern] = letterSpace
         
         return attr

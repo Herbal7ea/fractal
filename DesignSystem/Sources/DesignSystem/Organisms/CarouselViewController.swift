@@ -7,7 +7,7 @@
 //
 import Foundation
 
-public class CarouselViewController: SectionCollectionViewController, BrandUpdateable {
+public class CarouselViewController: SectionCollectionViewController {
 
     public var pagingType: PagingType = .false { didSet { setForNewPaging() }}
 
@@ -52,10 +52,6 @@ public class CarouselViewController: SectionCollectionViewController, BrandUpdat
             collectionView.isPagingEnabled = false
             collectionView.decelerationRate = .fast
         }
-    }
-    
-    public func brandWasUpdated() {
-        reload()
     }
 
     public override func reloadDidFinish() {

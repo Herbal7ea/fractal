@@ -28,6 +28,8 @@ public class CardViewController: UIViewController {
     
     private static let scaleFactor: CGFloat = 0.05
     public private(set) var cardViews = [CardView]()
+    public var darkBackgroundColor: UIColor = .black.alpha(0.6)
+    
     private weak var topLevelViewController: UIViewController?
     private var snapshots = NSMapTable<UIView, UIView>(keyOptions: [.weakMemory], valueOptions: [.strongMemory])
     
@@ -161,10 +163,7 @@ public class CardViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0.0
         view.isUserInteractionEnabled = true
-        
-        if dark {
-            view.backgroundColor = UIColor(white:0.0,alpha:0.6)
-        }
+        if dark { view.backgroundColor = darkBackgroundColor }
         
         let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(coverViewTapped))
         view.addGestureRecognizer(tapGestureRecogniser)

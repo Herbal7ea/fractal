@@ -23,6 +23,16 @@ public protocol ButtonBrand {
     func configure(_ button: Button, with style: Button.Style)
 }
 
+extension UIImage.Key {
+    public static let none = UIImage.Key("none")
+}
+
+extension UIImage {
+    public static var none: UIImage {
+        UIImage.with(.none) ?? UIView(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))).asImage()!
+    }
+}
+
 private class ButtonLayer: CAGradientLayer {
 
     var borderColors: [UIControl.State: CGColor] = [:]
@@ -59,6 +69,11 @@ open class Button: UIButton, Brandable {
         
         public let width: Width
         public let height: Height
+        
+        public init(_ width: Width, _ height: Height) {
+            self.width = width
+            self.height = height
+        }
         
         public init(width: Width, height: Height) {
             self.width = width
@@ -104,33 +119,49 @@ open class Button: UIButton, Brandable {
     
     public let style: Style
     public let size: Size
-    
+        
+    public var imageScale: CGFloat = 1.0 { didSet { update() }}
+    public var imageTitlePadding: CGFloat = .large { didSet { update() }}
+
     private let brandManager: BrandManager
+    private var images: [UIControl.State: UIImage] = [:]
     private var backgroundColors: [UIControl.State: UIColor] = [:]
 
+    private var overriddeImageConstraints: (top: NSLayoutConstraint, bottom: NSLayoutConstraint,
+                                            x: NSLayoutConstraint, y: NSLayoutConstraint)!
+    private let overriddeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    open override func image(for state: UIControl.State) -> UIImage? { nil }
+    open override func setImage(_ image: UIImage?, for state: UIControl.State) { images[state] = image; update() }
+
+    open override func setTitle(_ title: String?, for state: UIControl.State) {
+        super.setTitle(title, for: state)
+        update()
+    }
+    
     override public var backgroundColor: UIColor? { didSet { backgroundColors[.normal] = backgroundColor } }
-    override public var isSelected: Bool { didSet { updateBackground() } }
-    override public var isHighlighted: Bool { didSet { updateBackground() } }
-    override public var isEnabled: Bool { didSet { updateBackground() } }
+    override public var isSelected: Bool { didSet { update() } }
+    override public var isHighlighted: Bool { didSet { update() } }
+    override public var isEnabled: Bool { didSet { update() } }
+    
+    override public class var layerClass: AnyClass { ButtonLayer.self }
 
-    override public class var layerClass: AnyClass {
-        return ButtonLayer.self
-    }
+    private var buttonLayer: ButtonLayer? { layer as? ButtonLayer }
 
-    private var buttonLayer: ButtonLayer? {
-        return layer as? ButtonLayer
-    }
-
-    var gradientLayer: CAGradientLayer? {
-        return layer as? CAGradientLayer
-    }
+    var gradientLayer: CAGradientLayer? { layer as? CAGradientLayer }
 
     public init(style: Style, size: Size, brandManager: BrandManager = .shared) {
         self.size = size
         self.style = style
         self.brandManager = brandManager
         super.init(frame: .zero)
+        addImageView()
         setForBrand()
+        update()
     }
     
     public init(_ style: Style, _ size: Size, brandManager: BrandManager = .shared) {
@@ -138,7 +169,9 @@ open class Button: UIButton, Brandable {
         self.style = style
         self.brandManager = brandManager
         super.init(frame: .zero)
+        addImageView()
         setForBrand()
+        update()
     }
     
     public init(_ style: Style, _ sizeTuple: (width: Size.Width, height: Size.Height), brandManager: BrandManager = .shared) {
@@ -146,7 +179,9 @@ open class Button: UIButton, Brandable {
         self.style = style
         self.brandManager = brandManager
         super.init(frame: .zero)
+        addImageView()
         setForBrand()
+        update()
     }
     
     public func setForBrand() {
@@ -154,6 +189,7 @@ open class Button: UIButton, Brandable {
             contentEdgeInsets = buttonBrand.contentInset(for: size)
             titleLabel?.font = buttonBrand.typography(for: size).font
             buttonBrand.configure(self, with: style)
+            update()
         } else {
             print("BrandManager.brand does not conform to protocol ButtonBrand")
         }
@@ -161,6 +197,11 @@ open class Button: UIButton, Brandable {
     
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        update()
     }
     
     @discardableResult public func pin(sizeIn view: UIView) -> [NSLayoutConstraint] {
@@ -193,7 +234,47 @@ open class Button: UIButton, Brandable {
         buttonLayer?.gradientColors = [:]
         updateBackground()
     }
+    
+    private func addImageView() {
+        imageView?.isHidden = true
+        addSubview(overriddeImageView)
+        let c = overriddeImageView.pin(to: self, [.top, .bottom, .centerX, .centerY])
+        overriddeImageView.pin(to: overriddeImageView, [.widthToHeight])
+        overriddeImageConstraints = (c[0], c[1], c[2], c[3])
+    }
 
+    private func update() {
+        updateImage()
+        updateBackground()
+    }
+    
+    private func updateImage() {
+        
+        let normalImage = images[state] ?? images[.normal]
+        
+        if let image = normalImage, image != .none {
+            titleEdgeInsets = .zero
+            overriddeImageView.isHidden = false
+            overriddeImageView.image = image
+            overriddeImageView.tintColor = titleColor(for: state) ?? titleColor(for: .normal) ?? .red
+            let delta = frame.size.height - (frame.size.height * imageScale)
+            overriddeImageConstraints.top.constant = contentEdgeInsets.top + delta/2
+            overriddeImageConstraints.bottom.constant = -(contentEdgeInsets.bottom + delta/2)
+            
+            if let title = title(for: state) {
+                let typography = (brandManager.brand as? ButtonBrand)?.typography(for: size) ?? .medium
+                let width = title.size(typography: typography, maxLines: 1).width
+                let imageHeight = (frame.size.height - (contentEdgeInsets.top + contentEdgeInsets.bottom)) * imageScale
+                let delta = imageHeight + imageTitlePadding
+                overriddeImageConstraints.x.constant = -width/2 - imageTitlePadding + imageHeight/2
+                titleEdgeInsets = UIEdgeInsets(top: 0.0, left: delta, bottom: 0.0, right: 0.0)
+            }
+        } else {
+            overriddeImageView.isHidden = true
+            titleEdgeInsets = .zero
+        }
+    }
+    
     private func updateBackground() {
         let backgroundColor = backgroundColors[state] ?? alternativeBackgroundColor
         super.backgroundColor = backgroundColor

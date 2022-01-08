@@ -69,7 +69,7 @@ extension String {
         return CGSize(width: ceil(rect.size.width) + 1.0, height: ceil(lineHeight * lines))
     }
 
-    public func height(typography: Typography, width: CGFloat, maxLines: Int = 0) -> CGFloat {
+    public func height(typography: Typography, width: CGFloat = .greatestFiniteMagnitude, maxLines: Int = 0) -> CGFloat {
         guard count > 0 else { return 0.0 }
         let attributedString = NSAttributedString(string: self, typography: typography)
         let rect = attributedString.boundingRect(with: CGSize(width: width, height: .infinity), options: .usesLineFragmentOrigin, context: nil)

@@ -16,8 +16,8 @@ extension SectionBuilder {
 
 public class PeekingContentSection: SectionBuilder {
 
-    fileprivate let sections: [Section]
-    fileprivate let spacing: CGFloat
+    private let sections: [Section]
+    private let spacing: CGFloat
 
     public init(_ sections: [Section], spacing: CGFloat) {
         self.sections = sections

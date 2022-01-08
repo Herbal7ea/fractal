@@ -45,12 +45,6 @@ public extension Array where Element: Equatable {
     }
 }
 
-public extension UIView {
-    func addSubviews(_ views: [UIView]) {
-        for view in views { addSubview(view) }
-    }
-}
-
 public extension String {
     var localized: String {
         return NSLocalizedString(self, comment: self)
@@ -76,6 +70,14 @@ public extension UIView {
         while !(v is V) && v != nil { v = v?.superview }
         return v as? V
     }
+    
+    func addSubviews(_ views: [UIView]) {
+        views.forEach { addSubview($0) }
+    }
+    
+    func addGestureRecognizers(_ recognizers: [UIGestureRecognizer]) {
+        recognizers.forEach { addGestureRecognizer($0) }
+    }
 }
 
 public extension Array {
@@ -84,6 +86,11 @@ public extension Array {
         while index > count-1 { index -= count }
         while index < 0 { index += count }
         return index
+    }
+    
+    mutating func removeLastSafely() {
+        guard count > 0 else { return }
+        removeLast()
     }
 }
 

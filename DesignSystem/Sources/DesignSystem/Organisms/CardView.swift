@@ -32,7 +32,7 @@ public protocol CardViewContentDelegate: CardViewDelegate {
     func heightConstraint(for cardViewHeightAnchor: NSLayoutDimension, superview: UIView) -> NSLayoutConstraint?
 }
 
-public protocol CardViewDelegate: class {
+public protocol CardViewDelegate: AnyObject {
 
     func cardViewWillAppear(_ cardView: CardView) -> () -> Void
     func cardViewDidAppear(_ cardView: CardView)
@@ -111,10 +111,6 @@ public class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func handleTapped() {
-        animateOut()
-    }
-    
     func setBackgroundColor() {
         if let bgColor = viewController?.view.backgroundColor, bgColor != .clear {
             backgroundColor = bgColor
@@ -298,6 +294,7 @@ public class CardView: UIView {
         let color = self.viewController?.cardViewContentDelegate?.cardHandleColor
         view.strokeColor = color ?? .white //TODO: dark mode / dark cover
         view.addShortShadow()
+        view.isUserInteractionEnabled = false
         return view
     }()
 }
@@ -306,7 +303,8 @@ extension CardView: UIGestureRecognizerDelegate {
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
      
-        guard gestureRecognizer == panGestureRecognizer, otherGestureRecognizer == contentScrollView?.panGestureRecognizer else {
+        guard gestureRecognizer == panGestureRecognizer,
+              otherGestureRecognizer == contentScrollView?.panGestureRecognizer else {
             return false
         }
         
