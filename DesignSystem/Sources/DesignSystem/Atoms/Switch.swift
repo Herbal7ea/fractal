@@ -16,6 +16,8 @@ public final class Switch: UISwitch, Brandable {
     public init() {
         super.init(frame: .zero)
         layer.cornerRadius = bounds.size.height/2
+        if #available(iOS 13.0, *) { layer.cornerCurve = .continuous }
+        setContentCompressionResistancePriority(.required, for: .horizontal)
         setForBrand()
     }
 

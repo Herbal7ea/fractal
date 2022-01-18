@@ -9,30 +9,6 @@
 import Foundation
 import UIKit
 
-extension UIControl.State: Hashable {
-    public var hashValue: Int {
-        return Int(rawValue)
-    }
-}
-
-public protocol ButtonBrand {
-    func typography(for size: Button.Size) -> Typography
-    func widthPadding(for size: Button.Size) -> CGFloat
-    func contentInset(for size: Button.Size) -> UIEdgeInsets
-    func height(for size: Button.Size) -> CGFloat
-    func configure(_ button: Button, with style: Button.Style)
-}
-
-extension UIImage.Key {
-    public static let none = UIImage.Key("none")
-}
-
-extension UIImage {
-    public static var none: UIImage {
-        UIImage.with(.none) ?? UIView(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))).asImage()!
-    }
-}
-
 private class ButtonLayer: CAGradientLayer {
 
     var borderColors: [UIControl.State: CGColor] = [:]
@@ -184,6 +160,7 @@ open class Button: UIButton, Brandable {
             contentEdgeInsets = buttonBrand.contentInset(for: size)
             titleLabel?.font = buttonBrand.typography(for: size).font
             buttonBrand.configure(self, with: style)
+            print("Set for brand")
             update()
         } else {
             print("BrandManager.brand does not conform to protocol ButtonBrand")
@@ -246,7 +223,7 @@ open class Button: UIButton, Brandable {
     private func updateImage() {
         
         let normalImage = images[state] ?? images[.normal]
-        
+
         if let image = normalImage, image != .none {
             titleEdgeInsets = .zero
             overriddeImageView.isHidden = false
@@ -273,7 +250,6 @@ open class Button: UIButton, Brandable {
     private func updateBackground() {
         let backgroundColor = backgroundColors[state] ?? alternativeBackgroundColor
         super.backgroundColor = backgroundColor
-
         buttonLayer?.updateColors(for: state)
     }
 

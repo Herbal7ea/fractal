@@ -33,7 +33,7 @@ open class SectionControllerDataSource: NSObject {
         super.init()
     }
 
-    func bedrock(in section: Section, index: Int) -> (BedrockSection, Int)? {
+    public func bedrock(in section: Section, index: Int) -> (BedrockSection, Int)? {
         if let nestedSection = section as? NestedSection {
             //guard index < nestedSection.itemCount else { return nil }
             guard let givenSectionIndex = nestedSection.givenSectionIndex(from: index) else { return nil }
@@ -46,7 +46,7 @@ open class SectionControllerDataSource: NSObject {
         return nil
     }
 
-    func bedrock(for indexPath: IndexPath) -> (section: BedrockSection, index: Int)? {
+    public func bedrock(for indexPath: IndexPath) -> (section: BedrockSection, index: Int)? {
         guard indexPath.section < sections.count else { return nil }
         return bedrock(in: sections[indexPath.section], index: indexPath.item)
     }

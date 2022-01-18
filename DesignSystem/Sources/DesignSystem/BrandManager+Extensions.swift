@@ -18,6 +18,16 @@ public extension Button.Style {
     static let attention = Button.Style("attention")
     static let text      = Button.Style("text")
     static let toggle    = Button.Style("toggle")
+    static let icon      = Button.Style("icon")
+}
+
+public extension NewButton.Style {
+    static let primary   = NewButton.Style("primary")
+    static let secondary = NewButton.Style("secondary")
+    static let attention = NewButton.Style("attention")
+    static let text      = NewButton.Style("text")
+    static let toggle    = NewButton.Style("toggle")
+    static let icon      = NewButton.Style("icon")
 }
 
 public extension Typography.Key {
@@ -30,7 +40,7 @@ public extension Typography.Key {
     static let xlarge   = Typography.Key("xlarge")
     static let xxlarge  = Typography.Key("xxlarge")
     static let xxxlarge = Typography.Key("xxxlarge")
-    static let logo = Typography.Key("logo")
+    static let logo     = Typography.Key("logo")
 }
 
 public extension CGFloat.Key {

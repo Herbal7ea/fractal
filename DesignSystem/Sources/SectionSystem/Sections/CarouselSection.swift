@@ -14,6 +14,7 @@ extension SectionBuilder {
                          height: CarouselSection.HeightType = .full,
                          pagingType: CarouselViewController.PagingType = .false,
                          backgroundColor: UIColor = .clear,
+                         tearDownOnBrandChange: Bool = true,
                          layout: UICollectionViewLayout? = nil,
                          didScrollClosure: ((UIScrollView) -> Void)? = nil,
                          didEndDecelerating: ((UIScrollView) -> Void)? = nil,
@@ -23,6 +24,7 @@ extension SectionBuilder {
                                heightType: height,
                                pagingType: pagingType,
                                backgroundColor: backgroundColor,
+                               tearDownOnBrandChange: tearDownOnBrandChange,
                                layout: layout,
                                didScrollClosure: didScrollClosure,
                                didEndDecelerating: didEndDecelerating,
@@ -75,6 +77,7 @@ open class CarouselSection {
     private let id: String
     private let heightType: HeightType
     private let pagingType: CarouselViewController.PagingType
+    private let tearDownOnBrandChange: Bool
     private let sectionsClosure: () -> [Section]
     private var staticSections: [Section]
     private let layout: UICollectionViewLayout?
@@ -87,6 +90,7 @@ open class CarouselSection {
                      heightType: HeightType,
                      pagingType: CarouselViewController.PagingType,
                      backgroundColor: UIColor,
+                     tearDownOnBrandChange: Bool,
                      layout: UICollectionViewLayout?,
                      didScrollClosure: ((UIScrollView) -> Void)?,
                      didEndDecelerating: ((UIScrollView) -> Void)?,
@@ -96,6 +100,7 @@ open class CarouselSection {
         self.heightType = heightType
         self.pagingType = pagingType
         self.backgroundColor = backgroundColor
+        self.tearDownOnBrandChange = tearDownOnBrandChange
         self.sectionsClosure = sectionsClosure
         self.staticSections = sectionsClosure()
         self.didScrollClosure = didScrollClosure
@@ -148,6 +153,7 @@ extension CarouselSection: ViewControllerSection {
         vc.didScrollClosure = didScrollClosure
         vc.didEndDecelerating = didEndDecelerating
         vc.didEndScrollingAnimation = didEndScrollingAnimation
+        vc.tearDownOnBrandChange = tearDownOnBrandChange
         return vc
     }
 
@@ -197,6 +203,7 @@ extension CarouselSection {
                 vc.view.transform = transform
                 vc.view.layer.borderWidth = dividerWidth * excelPercentage
                 vc.view.layer.cornerRadius = .mediumCornerRadius * excelPercentage
+                if #available(iOS 13.0, *) { vc.view.layer.cornerCurve = .continuous }
             }
             
             guard showTopBorder else { return }

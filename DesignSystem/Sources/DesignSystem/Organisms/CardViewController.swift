@@ -66,6 +66,7 @@ public class CardViewController: UIViewController {
             view.addSubview(snapshot)
             snapshot.clipsToBounds = true
             snapshot.layer.cornerRadius = CardView.cornerRadius
+            if #available(iOS 13.0, *) { snapshot.layer.cornerCurve = .continuous }
             snapshot.pin(to: prev)
             prev.isHidden = true
         }
@@ -100,6 +101,7 @@ public class CardViewController: UIViewController {
         contain(viewController, constraintBlock:{ (childView) -> ([NSLayoutConstraint]) in
             cardView.addSubview(childView)
             childView.layer.cornerRadius = cardView.layer.cornerRadius
+            if #available(iOS 13.0, *) { childView.layer.cornerCurve = .continuous }
             return childView.viewControllerConstraints(in:cardView, with:topPadding)
         })
 
@@ -189,6 +191,7 @@ extension CardViewController: CardViewDelegate {
                 if let topVC = self.topLevelViewController, let snapshot = self.snapshots.object(forKey: topVC.view) {
                     snapshot.transform = CGAffineTransform(scaleX: scale, y: scale)
                     snapshot.layer.cornerRadius = CardView.cornerRadius
+                    if #available(iOS 13.0, *) { snapshot.layer.cornerCurve = .continuous }
                 }
             } else {
                 let cardView = self.cardViews[self.cardViews.count - 2]
@@ -218,6 +221,7 @@ extension CardViewController: CardViewDelegate {
             if let topVC = self.topLevelViewController, let snapshot = self.snapshots.object(forKey: topVC.view) {
                 snapshot.transform = CGAffineTransform(scaleX: scale, y: scale)
                 snapshot.layer.cornerRadius = CardView.cornerRadius - (CardView.cornerRadius * percentage)
+                if #available(iOS 13.0, *) { snapshot.layer.cornerCurve = .continuous }
             }
         }
         else if cardViews.count > 1 {

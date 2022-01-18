@@ -11,7 +11,7 @@ import UIKit
 
 extension SectionTableViewController: SectionController {
 
-    public var dataSource: SectionControllerDataSource { return data }
+    public var dataSource: SectionControllerDataSource { data }
 
     public var didPullDownToRefreshClosure: (() -> Void)? {
         get { return refresh }
@@ -91,7 +91,13 @@ extension SectionTableViewController: SectionController {
     }
     
     @objc open func reloadDidFinish() {
-        
+        didReload?()
+    }
+    
+    public func scrollToLast(animated: Bool) {
+        let count = tableView.numberOfSections-1
+        let row = tableView.numberOfRows(inSection: count)-1
+        tableView.scrollToRow(at: IndexPath(row: row, section: count), at: .bottom, animated: animated)
     }
 }
 
@@ -101,6 +107,7 @@ open class SectionTableViewController: UITableViewController, SectionBuilder, Br
     private var registeredReuseIdentifiers: Set<String> = []
     private var data: SectionControllerDataSource!
     private var configureTableView: ((UITableView) -> Void)?
+    public var didReload: (() -> Void)?
     public var refresh: (() -> Void)?
     public var tearDownOnBrandChange: Bool = true
 

@@ -94,6 +94,7 @@ extension CALayer {
         
         layer.frame = CGRect(x: 0.0, y: direction == .down ? size : -size, width: bounds.size.width, height: bounds.size.height)
         layer.cornerRadius = cornerRadius
+        if #available(iOS 13.0, *) { layer.cornerCurve = .continuous }
         layer.backgroundColor = backgroundColor
         backgroundColor = color.cgColor
     }
@@ -108,7 +109,8 @@ extension CALayer {
         
         layer.frame = CGRect(x: -2.0, y: 0.0, width: bounds.size.width + 4.0, height: bounds.size.height + 4.0)
         layer.cornerRadius = cornerRadius
-        
+        if #available(iOS 13.0, *) { layer.cornerCurve = .continuous }
+
         let roundedPath = UIBezierPath(roundedRect: layer.bounds.insetBy(dx: -1, dy: -1), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         let reversePath = UIBezierPath(roundedRect: layer.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).reversing()
         roundedPath.append(reversePath)

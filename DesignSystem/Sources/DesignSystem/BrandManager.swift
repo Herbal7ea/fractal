@@ -58,7 +58,6 @@ public struct PaletteOption {
 
 public class BrandManager {
 
-    public static let didChangeNotification = "BrandingManager_BrandDidChange"
     public static let contentSizeOverrideKey = "BrandingManager_contentSizeCategory_override"
     public static let contentSizeOverrideValueKey = "BrandingManager_contentSizeCategory_value"
 
@@ -106,7 +105,6 @@ public class BrandManager {
     }
     
     private func rebrandViewHierarchy() {
-        
         guard let root = rootViewController else {
             print("No rootViewController set on BrandManager, unable to rebrand hierarchy")
             return
@@ -116,11 +114,22 @@ public class BrandManager {
         var vcs = [UIViewController]()
         
         func applyTo(view: UIView) {
-            for v in view.subviews { applyTo(view: v) }
-            if view as? Brandable != nil { views.append(view) }
+            if let v = view as? UIStackView {
+                v.arrangedSubviews.forEach {
+                    applyTo(view: $0)
+                }
+            } else {
+                for v in view.subviews { applyTo(view: v) }
+                if view as? Brandable != nil {
+                    views.append(view)
+                }
+            }
         }
         
         func applyTo(viewController: UIViewController) {
+            
+            guard !vcs.contains(viewController) else { return }
+            
             applyTo(view: viewController.view)
             
             if viewController as? Brandable != nil {
@@ -133,11 +142,12 @@ public class BrandManager {
             }
             
             if let navigationController = viewController as? UINavigationController {
-                for vc in navigationController.viewControllers { applyTo(viewController: vc) }
-                applyTo(viewController: navigationController)
+                navigationController.viewControllers.forEach { applyTo(viewController: $0) }
             }
             
-            for vc in viewController.children { applyTo(viewController: vc) }
+            viewController.children.forEach {
+                applyTo(viewController: $0)
+            }
         }
         
         applyTo(viewController: root)

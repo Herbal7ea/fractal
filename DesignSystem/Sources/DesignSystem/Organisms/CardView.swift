@@ -101,6 +101,7 @@ public class CardView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         clipsToBounds = false
         layer.cornerRadius = CardView.cornerRadius
+        if #available(iOS 13.0, *) { layer.cornerCurve = .continuous }
         isUserInteractionEnabled = true
         addGestureRecognizer(panGestureRecognizer)
 

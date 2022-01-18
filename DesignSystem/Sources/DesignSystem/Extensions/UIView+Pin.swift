@@ -88,7 +88,7 @@ public struct Pin {
     public static var rightOf: Pin { return .rightOf() }
 
     public static var heightToWidth: Pin { return .heightToWidth() }
-    public static var widthToHeight: Pin { return .heightToWidth() }
+    public static var widthToHeight: Pin { return .widthToHeight() }
 
     public static var none: Pin { return Pin(.none) }
 

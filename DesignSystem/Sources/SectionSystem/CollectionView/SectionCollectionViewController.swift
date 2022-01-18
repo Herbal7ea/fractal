@@ -79,7 +79,13 @@ extension SectionCollectionViewController: SectionController {
     }
     
     @objc open func reloadDidFinish() {
-
+        didReload?()
+    }
+    
+    public func scrollToLast(animated: Bool) {
+        let count = collectionView.numberOfSections-1
+        let item = collectionView.numberOfItems(inSection: count)-1
+        collectionView.scrollToItem(at: IndexPath(item: item, section: count), at: .bottom, animated: animated)
     }
 }
 
@@ -89,6 +95,7 @@ open class SectionCollectionViewController: UICollectionViewController, SectionB
     private var data: SectionControllerDataSource!
     private var registeredReuseIdentifiers: Set<String> = []
     fileprivate var refresh: (() -> Void)?
+    public var didReload: (() -> Void)?
     public var tearDownOnBrandChange: Bool = true
 
     public init(useRefreshControl: Bool = false, layout: UICollectionViewLayout? = nil, direction: UICollectionView.ScrollDirection = .vertical) {

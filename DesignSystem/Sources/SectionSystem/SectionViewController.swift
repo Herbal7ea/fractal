@@ -12,6 +12,7 @@ import UIKit
 public protocol SectionController {
     func reload(animation: UITableView.RowAnimation)
     func reloadSections(at indexes: [Int], animation: UITableView.RowAnimation)
+    func scrollToLast(animated: Bool)
     var didPullDownToRefreshClosure: (() -> Void)? { get set }
     var dataSource: SectionControllerDataSource { get }
 }
