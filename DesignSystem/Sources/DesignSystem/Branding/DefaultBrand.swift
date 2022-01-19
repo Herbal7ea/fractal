@@ -285,57 +285,6 @@ extension DefaultBrand: ButtonBrand {
             button.layer.borderWidth = 0.0
         }
     }
-    
-    // MARK: - New Button
-    
-    public func typography(for size: NewButton.Size) -> Typography {
-        return .medium
-    }
-
-    public func contentInset(for size: NewButton.Size) -> UIEdgeInsets {
-        return UIEdgeInsets(top: .medium, left: .medium, bottom: .medium, right: .medium)
-    }
-    
-    public func widthPadding(for size: NewButton.Size) -> CGFloat {
-        return -.keyline*2
-    }
-    
-    public func height(for size: NewButton.Size) -> CGFloat {
-        return 52.0
-    }
-    
-    public func configure(_ button: NewButton, with style: NewButton.Style) {
-        switch style {
-        case .primary:
-            button.setTitleColor(.text(.light), for: .normal)
-            button.setBackgroundColor(.brand, for: .normal)
-            button.setBackgroundColor(UIColor.brand.darker(), for: .highlighted)
-            button.layer.borderWidth = 0.0
-        case .secondary:
-            button.setTitleColor(.brand, for: .normal)
-            button.setTitleColor(UIColor.brand.darker(), for: .highlighted)
-            button.setBackgroundColor(.clear, for: .normal)
-            button.setBackgroundColor(UIColor.brand, for: .highlighted)
-            button.layer.borderWidth = 2.0
-            button.layer.borderColor = UIColor.brand.cgColor
-        case .attention:
-            button.setTitleColor(.text(.light), for: .normal)
-            button.setBackgroundColor(.atom(.warning), for: .normal)
-            button.setBackgroundColor(UIColor.atom(.warning).darker(), for: .highlighted)
-            button.layer.borderWidth = 0.0
-        case .toggle:
-            button.setTitleColor(.text(.light), for: .normal)
-            button.setBackgroundColor(.brand, for: .normal)
-            button.setBackgroundColor(UIColor.brand.darker(), for: .highlighted)
-            button.setBackgroundColor(UIColor.brand.darker().darker(), for: .selected)
-            button.layer.borderWidth = 0.0
-        default:
-            button.setTitleColor(.text(.light), for: .normal)
-            button.setBackgroundColor(.text, for: .normal)
-            button.setBackgroundColor(UIColor.text.darker(), for: .highlighted)
-            button.layer.borderWidth = 0.0
-        }
-    }
 }
 
 extension DefaultBrand: NavigationControllerBrand {

@@ -21,15 +21,6 @@ public extension Button.Style {
     static let icon      = Button.Style("icon")
 }
 
-public extension NewButton.Style {
-    static let primary   = NewButton.Style("primary")
-    static let secondary = NewButton.Style("secondary")
-    static let attention = NewButton.Style("attention")
-    static let text      = NewButton.Style("text")
-    static let toggle    = NewButton.Style("toggle")
-    static let icon      = NewButton.Style("icon")
-}
-
 public extension Typography.Key {
     static let xxxsmall = Typography.Key("xxxsmall")
     static let xxsmall  = Typography.Key("xxsmall")
