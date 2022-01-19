@@ -19,17 +19,19 @@ extension SectionBuilder {
                          didScrollClosure: ((UIScrollView) -> Void)? = nil,
                          didEndDecelerating: ((UIScrollView) -> Void)? = nil,
                          didEndScrollingAnimation: ((UIScrollView) -> Void)? = nil,
+                         centredIndexPath: (() -> IndexPath?)? = nil,
                          sections: @autoclosure @escaping () -> [Section]) -> CarouselSection {
-        return CarouselSection(id: reuseIdentifier,
-                               heightType: height,
-                               pagingType: pagingType,
-                               backgroundColor: backgroundColor,
-                               tearDownOnBrandChange: tearDownOnBrandChange,
-                               layout: layout,
-                               didScrollClosure: didScrollClosure,
-                               didEndDecelerating: didEndDecelerating,
-                               didEndScrollingAnimation: didEndScrollingAnimation,
-                               sectionsClosure: sections)
+        CarouselSection(id: reuseIdentifier,
+                        heightType: height,
+                        pagingType: pagingType,
+                        backgroundColor: backgroundColor,
+                        tearDownOnBrandChange: tearDownOnBrandChange,
+                        layout: layout,
+                        didScrollClosure: didScrollClosure,
+                        didEndDecelerating: didEndDecelerating,
+                        didEndScrollingAnimation: didEndScrollingAnimation,
+                        centredIndexPath: centredIndexPath,
+                        sectionsClosure: sections)
     }
 }
 
@@ -71,7 +73,7 @@ open class CarouselSection {
     }
 
     public enum HeightType {
-        case full, width, multiplier(CGFloat), custom(CGFloat)
+        case full, width, widthMultiplier(CGFloat), multiplier(CGFloat), custom(CGFloat)
     }
     
     private let id: String
@@ -84,6 +86,7 @@ open class CarouselSection {
     private var didScrollClosure: ((UIScrollView) -> Void)?
     private var didEndDecelerating: ((UIScrollView) -> Void)?
     private var didEndScrollingAnimation: ((UIScrollView) -> Void)?
+    private var centredIndexPath: (() -> IndexPath?)?
     private let backgroundColor: UIColor
     
     fileprivate init(id: String,
@@ -95,6 +98,7 @@ open class CarouselSection {
                      didScrollClosure: ((UIScrollView) -> Void)?,
                      didEndDecelerating: ((UIScrollView) -> Void)?,
                      didEndScrollingAnimation: ((UIScrollView) -> Void)?,
+                     centredIndexPath: (() -> IndexPath?)? = nil,
                      sectionsClosure: @escaping () -> [Section]) {
         self.id = id
         self.heightType = heightType
@@ -106,6 +110,7 @@ open class CarouselSection {
         self.didScrollClosure = didScrollClosure
         self.didEndDecelerating = didEndDecelerating
         self.didEndScrollingAnimation = didEndScrollingAnimation
+        self.centredIndexPath = centredIndexPath
         self.layout = layout
     }
     
@@ -165,6 +170,8 @@ extension CarouselSection: ViewControllerSection {
             return SectionCellSize(width: width, height: view.bounds.size.height)
         case .width:
             return SectionCellSize(width: width, height: width)
+        case .widthMultiplier(let value):
+            return SectionCellSize(width: width, height: width * value)
         case .custom(let value):
             return SectionCellSize(width: width, height: value)
         case .multiplier(let value):
@@ -181,6 +188,12 @@ extension CarouselSection: ViewControllerSection {
         vc.didScrollClosure = didScrollClosure
         vc.didEndDecelerating = didEndDecelerating
         vc.reload()
+        
+        if let indexPath = centredIndexPath?() {
+            vc.collectionView.scrollToItem(at: indexPath,
+                                           at: [.centeredHorizontally, .centeredVertically],
+                                           animated: false)
+        }
         
         // move offset logic into section collectionviewcontroller
         // vc.collectionView.setContentOffset(CGPoint(x: vc.collectionView.contentSize.width > self.dataSource.offset ? self.dataSource.offset : 0.0, y: 0.0), animated: false)

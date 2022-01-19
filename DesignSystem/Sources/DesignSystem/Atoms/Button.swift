@@ -1,5 +1,5 @@
 //
-//  NewButton.swift
+//  Button.swift
 //  DesignSystem
 //
 //  Created by Anthony Smith on 18/01/2022.
@@ -87,10 +87,8 @@ public class Button: UIControl, Brandable {
     override public var tintColor: UIColor! { didSet { updateTitleColor() } }
     
     public var isAnimated = false
-    public var imageTitlePadding: CGFloat = .keyline { didSet { updateImage() } }
-    public var imageScale: CGFloat = 1.0 {
-        didSet { imageView.transform = imageScale == 1.0 ? .identity : CGAffineTransform(scaleX: imageScale, y: imageScale) }
-    }
+    public var imageTitlePadding: CGFloat { get { contentView.spacing } set { contentView.spacing = newValue } }
+    public var imageScale: CGFloat { get { contentView.imageScale } set { contentView.imageScale = newValue } }
     
     public let style: Style
     public let size: Size
@@ -117,7 +115,6 @@ public class Button: UIControl, Brandable {
         if #available(iOS 13.0, *) { layer.cornerCurve = .continuous }
 
         addSubview(contentView)
-        contentView.addSubviews([imageView, label])
         
         let constraints = contentView.pin(to: self, [.leading(options: [.relation(.greaterThanOrEqual)]),
                                                      .trailing(options: [.relation(.lessThanOrEqual)]),
@@ -127,15 +124,7 @@ public class Button: UIControl, Brandable {
                                                      .centerY])
         
         contentViewConstrants = (constraints[0], constraints[1], constraints[2], constraints[3])
-        imageView.pin(to: contentView, [.leading,
-                                        .centerY,
-                                        .top,
-                                        .bottom,
-                                        .widthToHeight])
-        labelXConstraint = label.pin(to: contentView, [.leading, .trailing, .top, .bottom])[0]
-        
         setForBrand()
-        update()
         
         addTarget(self, action: #selector(didTouchDown), for: [.touchDownRepeat, .touchDown])
         addTarget(self, action: #selector(didTouchUpInside), for: .touchUpInside)
@@ -190,11 +179,13 @@ public class Button: UIControl, Brandable {
     }
     
     private func update() {
-        
+
         updateTitle()
         updateImage()
         
-        guard isAnimated && renderedState != state else {
+        guard renderedState != state else { return }
+            
+        guard isAnimated else {
             updateTitleColor()
             updateBackground()
             updateGradientBackground()
@@ -202,6 +193,8 @@ public class Button: UIControl, Brandable {
             return
         }
         
+        renderedState = state
+
         UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState, .curveEaseInOut]) {
             self.updateTitleColor()
             self.updateBackground()
@@ -233,8 +226,6 @@ public class Button: UIControl, Brandable {
                 self.updateScale()
             } completion: { _ in }
         }
-        
-        renderedState = state
     }
     
     private func updateBackground() {
@@ -249,18 +240,13 @@ public class Button: UIControl, Brandable {
     
     private func updateTitle() {
         label.text = titles[state] ?? titles[.normal]
+        contentView.prepareForRedraw()
     }
     
     private func updateImage() {
-        guard let image = images[state] ?? images[.normal], image != .none else {
-            labelXConstraint.constant = 0.0
-            imageView.isHidden = true
-            return
-        }
-        
-        imageView.isHidden = false
+        let image = images[state] ?? images[.normal]
         imageView.image = image
-        labelXConstraint.constant = (contentView.frame.size.height * imageScale) + imageTitlePadding
+        contentView.prepareForRedraw()
     }
     
     private func updateTitleColor() {
@@ -317,32 +303,25 @@ public class Button: UIControl, Brandable {
     
     // MARK: - Accessors
     
-    @discardableResult public func pin(sizeIn view: UIView) -> [NSLayoutConstraint] {
-        pin(to: view, [.width(for: size, brandManager: brandManager),
-                       .height(for: size, brandManager: brandManager)])
-    }
-    
-    @discardableResult public func pin(height view: UIView) -> [NSLayoutConstraint] {
-        pin(to: view, [.height(for: size, brandManager: brandManager)])
-    }
-    
     override public class var layerClass: AnyClass { CAGradientLayer.self }
+
+    override public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool { false }
 
     private var gradientLayer: CAGradientLayer { layer as! CAGradientLayer }
     
+    private var label: Label { contentView.label }
+
+    private var imageView: ImageView { contentView.imageView }
+
     private var computedBackgroundColor: UIColor? {
         let normal = backgroundColors[.normal]
         let selected = backgroundColors[.highlighted] ?? normal
-
         switch state {
-        case .highlighted, .selected, [.selected, .highlighted]:
-            return normal?.darker()
-        case .disabled:
-            return normal?.alpha()
-        case [.selected, .disabled]:
-            return selected?.lighter()
-        default:
-            return normal
+        case .highlighted, .selected,
+            [.selected, .highlighted]: return normal?.darker()
+        case .disabled:                return normal?.alpha()
+        case [.selected, .disabled]:   return selected?.lighter()
+        default:                       return normal
         }
     }
     
@@ -362,22 +341,82 @@ public class Button: UIControl, Brandable {
     private var gradientLocations: [UIControl.State: [NSNumber]] = [:]
 
     private var contentViewConstrants: (leading: NSLayoutConstraint, trailing: NSLayoutConstraint, top: NSLayoutConstraint, bottom: NSLayoutConstraint)!
-    private var labelXConstraint: NSLayoutConstraint!
     private var renderedState: UIControl.State = .normal
     
-    private let contentView: UIView = {
-        let view = UIView()
-        view.isUserInteractionEnabled = false
-        return view
-    }()
+    private let contentView = ContentView()
+}
+
+private class ContentView: UIView {
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
+    var spacing: CGFloat = .keyline { didSet { prepareForRedraw() } }
+    
+    var imageScale: CGFloat = 1.0 {
+        didSet {
+            imageView.transform = imageScale == 1.0 ? .identity : CGAffineTransform(scaleX: imageScale, y: imageScale)
+            prepareForRedraw()
+        }
+    }
+
+    private var labelXConstraint: NSLayoutConstraint!
+
+    init() {
+        super.init(frame: .zero)
+        isUserInteractionEnabled = false
+        addSubviews([imageView, label])
+        imageView.pin(to: self, [.leading,
+                                 .centerY,
+                                 .top,
+                                 .bottom,
+                                 .widthToHeight])
+        labelXConstraint = label.pin(to: self, [.leading, .trailing, .top, .bottom])[0]
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var intrinsicContentSize: CGSize {
+
+        var width: CGFloat = 0.0
+        
+        if let text = label.text {
+            width += text.size(typography: label.typography, maxLines: 1).width
+        }
+        
+        if !imageView.isHidden {
+            width += imageWidth
+            
+            if !(label.text?.isEmpty ?? true) {
+                width += spacing
+            }
+        }
+        
+        return CGSize(width: width, height: 0.0)
+    }
+    
+    func prepareForRedraw() {
+        
+        if let image = imageView.image {
+            imageView.isHidden = image == .none
+        } else {
+            imageView.isHidden = true
+        }
+        
+        label.isHidden = (label.text?.isEmpty ?? true)
+        invalidateIntrinsicContentSize()
+        
+        labelXConstraint.constant = imageView.isHidden ? 0.0 : imageWidth + spacing
+    }
+    
+    private var imageWidth: CGFloat { bounds.size.height * imageScale }
+    
+    let imageView: ImageView = {
+        let imageView = ImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private let label: Label = {
+    let label: Label = {
         let label = Label()
         label.textAlignment = .center
         return label
@@ -395,6 +434,17 @@ extension UIImage.Key {
 extension UIImage {
     public static var none: UIImage {
         UIImage.with(.none) ?? UIView(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))).asImage()!
+    }
+}
+
+extension Button {
+    @discardableResult public func pin(sizeIn view: UIView) -> [NSLayoutConstraint] {
+        pin(to: view, [.width(for: size, brandManager: brandManager),
+                       .height(for: size, brandManager: brandManager)])
+    }
+    
+    @discardableResult public func pin(height view: UIView) -> [NSLayoutConstraint] {
+        pin(to: view, [.height(for: size, brandManager: brandManager)])
     }
 }
 
