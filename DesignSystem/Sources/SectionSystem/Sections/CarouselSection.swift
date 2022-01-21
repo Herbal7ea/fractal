@@ -20,7 +20,7 @@ extension SectionBuilder {
                          didEndDecelerating: ((UIScrollView) -> Void)? = nil,
                          didEndScrollingAnimation: ((UIScrollView) -> Void)? = nil,
                          centredIndexPath: (() -> IndexPath?)? = nil,
-                         sections: @autoclosure @escaping () -> [Section]) -> CarouselSection {
+                         sections: @escaping () -> [Section]) -> CarouselSection {
         CarouselSection(id: reuseIdentifier,
                         heightType: height,
                         pagingType: pagingType,

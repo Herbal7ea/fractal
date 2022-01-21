@@ -185,6 +185,6 @@ open class SectionTableViewController: UITableViewController, SectionBuilder, Br
     // MARK: - Accessors
 
     open var refreshControlTintColor: UIColor {
-        return .atom(.refreshControl)
+        .atom(.refreshControl)
     }
 }

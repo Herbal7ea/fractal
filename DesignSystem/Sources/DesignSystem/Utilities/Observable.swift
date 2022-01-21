@@ -38,14 +38,14 @@ open class Observable<V> {
     public func addObserver(_ observingObject: AnyObject, skipFirst: Bool = true, closure: @escaping (V) -> Void) {
         
         let wrapper = ClosureWrapper(closure)
-        
+
         // Giving the closure back to the object that is observing allows ClosureWrapper
         // to die at the same time as observing object
-        
+
         var wrappers = objc_getAssociatedObject(observingObject, &AssociatedKeys.reference) as? [Any] ?? [Any]()
         wrappers.append(wrapper)
         objc_setAssociatedObject(observingObject, &AssociatedKeys.reference, wrappers, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        
+
         observers.setObject(wrapper, forKey: observingObject)
         if !skipFirst { closure(value) }
     }
@@ -65,18 +65,14 @@ open class Observable<V> {
         }
         
         if log { print("** Count:", observers.count) }
-        
-        var i = 0
-        
+                
         var objects = [ClosureWrapper<V>]()
         
         for object in observers.objectEnumerator() ?? NSEnumerator() {
-            if log { print("Notify", i); i += 1 }
+            // if log { print("Notify", i); i += 1 }
             guard let o =  (object as? ClosureWrapper<V>) else { return }
             objects.append(o)
         }
-        
-        if log { print("-- Objects:", objects.count) }
         
         for o in objects { o.closure(value) }
         

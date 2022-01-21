@@ -274,16 +274,16 @@ extension CardViewController: CardViewDelegate {
         
         cardViews.remove(at: index)
         
-        if let vc = cardView.viewController {
-            dismissContained(vc)
-        }
-        
         cardView.coverView?.removeFromSuperview()
         cardView.removeFromSuperview()
         if cardView.showHandle {
             cardView.handleView.removeFromSuperview()
         }
         
+        if let vc = cardView.viewController {
+            dismissContained(vc)
+        }
+
         if let prev = cardViews.count == 0 ? topLevelViewController?.view : cardViews.last {
             snapshots.object(forKey: prev)?.removeFromSuperview()
             snapshots.removeObject(forKey: prev)
@@ -293,7 +293,7 @@ extension CardViewController: CardViewDelegate {
         if cardViews.count == 0 {
             view.superview?.alpha = 0.0
             snapshots.removeAllObjects()
-        }        
+        }
     }
 }
 
