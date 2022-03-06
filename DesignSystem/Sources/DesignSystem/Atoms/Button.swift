@@ -14,18 +14,11 @@ public protocol ButtonBrand {
     func widthPadding(for size: Button.Size) -> CGFloat
     func contentInset(for size: Button.Size) -> UIEdgeInsets
     func height(for size: Button.Size) -> CGFloat
-    func configure(_ button: Button, with style: Button.Style)
+    func configure(_ button: Button, with style: Key)
 }
 
 public class Button: UIControl, Brandable {
-    
-    public struct Style: Equatable, RawRepresentable {
-        public let rawValue: String
-        public init(_ value: String) { self.rawValue = value }
-        public init(rawValue: String) { self.rawValue = rawValue }
-        public static func ==(lhs: Style, rhs: Style) -> Bool { lhs.rawValue == rhs.rawValue }
-    }
-    
+        
     public struct Size {
         
         public enum Width {
@@ -81,30 +74,48 @@ public class Button: UIControl, Brandable {
         set { backgroundColors[.normal] = newValue; updateBackground() }
     }
 
-    override public var isSelected: Bool { didSet { update() } }
-    override public var isHighlighted: Bool { didSet { update() } }
-    override public var isEnabled: Bool { didSet { update() } }
+    override public var isSelected: Bool { didSet { observedIsSelected.value = isSelected; update() } }
+    override public var isHighlighted: Bool { didSet { observedIsHighlighted.value = isHighlighted; update() } }
+    override public var isEnabled: Bool { didSet { observedIsEnabled.value = isEnabled; update() } }
     override public var tintColor: UIColor! { didSet { updateTitleColor() } }
     
+    public lazy var observedIsSelected: Observable<Bool> = {
+        let observed = Observable<Bool>(self.isSelected)
+        observed.ignoreSame = true
+        return observed
+    }()
+    
+    public lazy var observedIsHighlighted: Observable<Bool> = {
+        let observed = Observable<Bool>(self.isHighlighted)
+        observed.ignoreSame = true
+        return observed
+    }()
+    
+    public lazy var observedIsEnabled: Observable<Bool> = {
+        let observed = Observable<Bool>(self.isEnabled)
+        observed.ignoreSame = true
+        return observed
+    }()
+
     public var isAnimated = false
     public var imageTitlePadding: CGFloat { get { contentView.spacing } set { contentView.spacing = newValue } }
     public var imageScale: CGFloat { get { contentView.imageScale } set { contentView.imageScale = newValue } }
     
-    public let style: Style
+    public let style: Key
     public let size: Size
      
-    public convenience init(_ style: Style, _ size: Size = Size(.full, .large), tapped: @escaping (Button) -> Void) {
+    public convenience init(_ style: Key, _ size: Size = Size(.full, .large), tapped: @escaping (Button) -> Void) {
         self.init(style, size, brandManager: .shared, tapped: tapped)
     }
     
-    public convenience init(_ style: Style,
+    public convenience init(_ style: Key,
                 _ width: Size.Width = .full,
                 _ height: Size.Height = .large,
                 tapped: @escaping (Button) -> Void) {
         self.init(style, Size(width, height), brandManager: .shared, tapped: tapped)
     }
     
-    init(_ style: Style, _ size: Size, brandManager: BrandManager,
+    init(_ style: Key, _ size: Size, brandManager: BrandManager,
         tapped: @escaping (Button) -> Void) {
         self.size = size
         self.style = style

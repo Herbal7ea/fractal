@@ -11,7 +11,7 @@ import Foundation
 // While reactive frameworks do the same job, keeping this framework dependency free is the goal..
 // Using this helper is completely optional, using reactive a framework to make Sections is of course possible
 
-open class Observable<V> {
+open class Observable<V: Equatable> {
     
     private class ClosureWrapper<V>: NSObject {
 
@@ -61,7 +61,7 @@ open class Observable<V> {
     private func notify() {
         
         if ignoreSame {
-           // guard value != previous else { return }
+            guard value != previous else { return }
         }
         
         if log { print("** Count:", observers.count) }
