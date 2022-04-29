@@ -253,7 +253,7 @@ extension DefaultBrand: ButtonBrand {
         return 52.0
     }
     
-    public func configure(_ button: Button, with style: Button.Style) {
+    public func configure(_ button: Button, with style: Key) {
         switch style {
         case .primary:
             button.setTitleColor(.text(.light), for: .normal)

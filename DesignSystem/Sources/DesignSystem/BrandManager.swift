@@ -444,3 +444,102 @@ public extension UIKeyboardAppearance {
 public extension UIContentSizeCategory {
     static var managedContentSizeCategory: UIContentSizeCategory { BrandManager.shared.contentSizeCategory }
 }
+
+public struct Key: Equatable, RawRepresentable {
+    public let rawValue: String
+
+    public init(_ value: String) {
+        self.rawValue = value
+    }
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static func ==(lhs: Key, rhs: Key) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+}
+
+public extension Key {
+    
+    static let xxxSmall = Key("xxxSmall")
+    static let xxSmall  = Key("xxSmall")
+    static let xSmall   = Key("xSmall")
+    static let small    = Key("small")
+    static let medium   = Key("medium")
+    static let large    = Key("large")
+    static let xLarge   = Key("xLarge")
+    static let xxLarge  = Key("xxLarge")
+    static let xxxLarge = Key("xxxLarge")
+        
+    static let hero         = Key("hero")
+    static let primary      = Key("primary")
+    static let secondary    = Key("secondary")
+    static let tertiary     = Key("tertiary")
+    static let attention    = Key("attention")
+    static let text         = Key("text")
+    static let toggle       = Key("toggle")
+    static let icon         = Key("icon")
+    static let logo         = Key("logo")
+    static let localized    = Key("localized")
+    static let nonLocalized = Key("nonLocalized")
+    static let detail       = Key("detail")
+    static let information  = Key("information")
+    static let light        = Key("light")
+    static let lightDetail  = Key("lightDetail")
+    
+    static let positive  = Key("positive")
+    static let negative  = Key("negative")
+    static let highlight = Key("highlight")
+    static let lowlight  = Key("lowlight")
+    static let warning   = Key("warning")
+    static let clear     = Key("clear")
+    static let missing   = Key("missing")
+    static let alpha     = Key("alpha")
+    static let dark      = Key("dark")
+    
+    static let keyline  = Key("keyline")
+    static let padding  = Key("padding")
+    
+    static let strong          = Key("strong")
+    static let condensed       = Key("condensed")
+    static let noAccessibility = Key("noAccessibility")
+    static let placeholder     = Key("placeholder")
+
+    static let cell                      = Key("cell")
+    static let cellSelected              = Key("cellSelected")
+    static let detailDisclosure          = Key("detailDisclosure")
+    static let divider                   = Key("divider")
+    static let refreshControl            = Key("refreshControl")
+    static let segmentedControlHighlight = Key("segmentedControlHighlight")
+    static let segmentedControl          = Key("segmentedControl")
+    static let sliderPositive            = Key("sliderPositive")
+    static let sliderNegative            = Key("sliderNegative")
+    static let sliderThumb               = Key("sliderThumb")
+    static let segmentedDivider          = Key("segmentedDivider")
+    static let shadow                    = Key("shadow")
+    static let switchPositive            = Key("switchPositive")
+    static let switchNegative            = Key("switchNegative")
+    static let switchThumb               = Key("switchThumb")
+    static let tabSelected               = Key("tabSelected")
+    static let tabUnselected             = Key("tabUnselected")
+    static let heroDetail                = Key("hero_detail")
+    static let handle                    = Key("handle")
+    
+    static let cross      = Key("cross")
+    static let confetti1  = Key("confetti1")
+    static let confetti2  = Key("confetti2")
+    static let confetti3  = Key("confetti3")
+    static let nodataLogo = Key("bold_logo")
+    static let hint       = Key("bulb")
+    static let history    = Key("history")
+    static let restart    = Key("restart")
+    static let settings   = Key("settings")
+    static let skip       = Key("skip")
+    static let star       = Key("star")
+    static let dot        = Key("dot")
+    static let options    = Key("options")
+    static let undo       = Key("undo")
+    static let check      = Key("check")
+}

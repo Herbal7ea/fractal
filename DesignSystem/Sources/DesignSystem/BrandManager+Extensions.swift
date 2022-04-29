@@ -12,15 +12,6 @@ public extension Brand {
     var resourceBundle: Bundle? { return nil }
 }
 
-public extension Button.Style {
-    static let primary   = Button.Style("primary")
-    static let secondary = Button.Style("secondary")
-    static let attention = Button.Style("attention")
-    static let text      = Button.Style("text")
-    static let toggle    = Button.Style("toggle")
-    static let icon      = Button.Style("icon")
-}
-
 public extension Typography.Key {
     static let xxxsmall = Typography.Key("xxxsmall")
     static let xxsmall  = Typography.Key("xxsmall")
